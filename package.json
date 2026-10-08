@@ -14,7 +14,7 @@
     "test": "vitest run --project unit --project infra",
     "test:integration": "vitest run --project integration",
     "test:e2e": "vitest run --project e2e",
-    "ddb:start": "docker run -d --rm --name dynamodb-local -p 8000:8000 amazon/dynamodb-local",
+    "ddb:start": "docker run -d --rm --name dynamodb-local -p 8000:8000 docker.io/amazon/dynamodb-local",
     "ddb:stop": "docker stop dynamodb-local",
     "synth": "cdk synth",
     "deploy": "cdk deploy",
