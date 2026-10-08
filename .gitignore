@@ -1,0 +1,10 @@
+zadani
+node_modules/
+cdk.out/
+dist/
+coverage/
+*.tsbuildinfo
+.superpowers/
+agy-*
+offload-out*
+task-spec.md

@@ -1,0 +1,43 @@
+{
+  "name": "guess-the-number",
+  "version": "1.0.0",
+  "description": "Serverless \"Guess the Number\" REST API on AWS (API Gateway, Lambda, DynamoDB) defined with AWS CDK",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=20.19"
+  },
+  "scripts": {
+    "lint": "eslint . && prettier --check .",
+    "format": "prettier --write .",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run --project unit --project infra",
+    "test:integration": "vitest run --project integration",
+    "test:e2e": "vitest run --project e2e",
+    "ddb:start": "docker run -d --rm --name dynamodb-local -p 8000:8000 amazon/dynamodb-local",
+    "ddb:stop": "docker stop dynamodb-local",
+    "synth": "cdk synth",
+    "deploy": "cdk deploy",
+    "destroy": "cdk destroy"
+  },
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "3.1147.0",
+    "@aws-sdk/lib-dynamodb": "3.1147.0",
+    "zod": "4.6.5"
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "@types/aws-lambda": "8.10.164",
+    "@types/node": "22.20.5",
+    "aws-cdk": "2.1145.0",
+    "aws-cdk-lib": "2.272.0",
+    "constructs": "10.8.1",
+    "esbuild": "0.28.2",
+    "eslint": "10.12.0",
+    "prettier": "3.9.9",
+    "tsx": "4.23.15",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.71.1",
+    "vitest": "4.1.11"
+  }
+}
