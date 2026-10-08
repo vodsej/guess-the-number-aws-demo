@@ -5,7 +5,14 @@ export default defineConfig({
     projects: [
       { test: { name: "unit", include: ["test/unit/**/*.test.ts"] } },
       // Synthesising the stack bundles both Lambdas with esbuild, which takes a few seconds.
-      { test: { name: "infra", include: ["test/infra/**/*.test.ts"], testTimeout: 60_000 } },
+      {
+        test: {
+          name: "infra",
+          include: ["test/infra/**/*.test.ts"],
+          testTimeout: 60_000,
+          hookTimeout: 60_000,
+        },
+      },
       // Requires DynamoDB Local on http://localhost:8000 (npm run ddb:start).
       { test: { name: "integration", include: ["test/integration/**/*.test.ts"] } },
       // Requires API_URL pointing at a deployed stage; skipped otherwise.

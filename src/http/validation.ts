@@ -1,4 +1,5 @@
-import { z } from "zod";
+// zod/mini is the tree-shakeable build: ~16 KB in the Lambda bundle instead of ~450 KB.
+import * as z from "zod/mini";
 import { MAX_GUESS, MIN_GUESS } from "../domain/game";
 
 const GAME_ID_ERROR = "gameId must be a valid UUID.";
@@ -9,8 +10,10 @@ const guessRequestSchema = z.object(
     gameId: z.uuid({ error: GAME_ID_ERROR }),
     guess: z
       .int({ error: GUESS_ERROR })
-      .min(MIN_GUESS, { error: GUESS_ERROR })
-      .max(MAX_GUESS, { error: GUESS_ERROR }),
+      .check(
+        z.minimum(MIN_GUESS, { error: GUESS_ERROR }),
+        z.maximum(MAX_GUESS, { error: GUESS_ERROR }),
+      ),
   },
   { error: "Request body must be a JSON object." },
 );
