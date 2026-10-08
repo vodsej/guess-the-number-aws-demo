@@ -8,3 +8,4 @@ coverage/
 agy-*
 offload-out*
 task-spec.md
+cdk-outputs.json

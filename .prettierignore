@@ -2,3 +2,4 @@ node_modules/
 cdk.out/
 coverage/
 package-lock.json
+cdk-outputs.json

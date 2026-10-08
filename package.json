@@ -17,7 +17,7 @@
     "ddb:start": "docker run -d --rm --name dynamodb-local -p 8000:8000 docker.io/amazon/dynamodb-local",
     "ddb:stop": "docker stop dynamodb-local",
     "synth": "cdk synth",
-    "deploy": "cdk deploy",
+    "deploy": "cdk deploy --outputs-file cdk-outputs.json",
     "destroy": "cdk destroy"
   },
   "dependencies": {

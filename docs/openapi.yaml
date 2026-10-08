@@ -1,0 +1,136 @@
+openapi: 3.0.3
+info:
+  title: Guess the Number API
+  version: 1.0.0
+  description: |
+    Start a game, then guess a secret number between 1 and 100. Each guess is answered with
+    "too low", "too high" or "correct". All responses — including errors — are JSON objects
+    with a `message` property.
+servers:
+  - url: https://{apiId}.execute-api.{region}.amazonaws.com/v1
+    description: Deployed API Gateway stage (see the `ApiUrl` stack output)
+    variables:
+      apiId:
+        default: abc123
+      region:
+        default: eu-central-1
+# The demo API is unauthenticated; see "Ideas for production" in the README.
+security: []
+paths:
+  /start-game:
+    post:
+      summary: Start a new game
+      operationId: startGame
+      description: Creates a game with a random secret number between 1 and 100. No request body.
+      responses:
+        "201":
+          description: Game created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StartGameResponse"
+              example:
+                gameId: 3f2b8c1e-4d5a-4b6c-9e7f-0a1b2c3d4e5f
+                message: Game started. Make a guess between 1 and 100.
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+  /guess:
+    post:
+      summary: Guess the secret number
+      operationId: guess
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GuessRequest"
+            example:
+              gameId: 3f2b8c1e-4d5a-4b6c-9e7f-0a1b2c3d4e5f
+              guess: 50
+      responses:
+        "200":
+          description: Guess evaluated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Message"
+              examples:
+                tooLow:
+                  value: { message: Too low. Try again! }
+                tooHigh:
+                  value: { message: Too high. Try again! }
+                correct:
+                  value: { message: Correct! You've guessed the number. }
+        "400":
+          description: Malformed JSON, missing fields, guess not an integer 1–100, or gameId not a UUID
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Message"
+              example:
+                message: guess must be an integer between 1 and 100.
+        "404":
+          description: No game with this gameId
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Message"
+              example:
+                message: Game not found.
+        "409":
+          description: The game has already been won; start a new game
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Message"
+              example:
+                message: This game has already been won. Start a new game.
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+components:
+  schemas:
+    Message:
+      type: object
+      required: [message]
+      properties:
+        message:
+          type: string
+    StartGameResponse:
+      type: object
+      required: [gameId, message]
+      properties:
+        gameId:
+          type: string
+          format: uuid
+        message:
+          type: string
+    GuessRequest:
+      type: object
+      required: [gameId, guess]
+      properties:
+        gameId:
+          type: string
+          format: uuid
+        guess:
+          type: integer
+          minimum: 1
+          maximum: 100
+  responses:
+    TooManyRequests:
+      description: Stage throttling limit exceeded (returned by API Gateway)
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Message"
+    InternalServerError:
+      description: Unexpected server error
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Message"
+          example:
+            message: Internal server error.
