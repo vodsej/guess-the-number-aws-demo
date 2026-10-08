@@ -2,7 +2,8 @@ import { describe, expect, it } from "vitest";
 
 // Base URL of the deployed stage, e.g. the `ApiUrl` stack output:
 // API_URL=https://abc123.execute-api.eu-central-1.amazonaws.com/v1/ npm run test:e2e
-const API_URL = process.env.API_URL;
+// A trailing slash is added if missing so that `new URL("guess", API_URL)` keeps the /v1 segment.
+const API_URL = process.env.API_URL ? process.env.API_URL.replace(/\/?$/, "/") : undefined;
 
 interface ApiResponse {
   status: number;

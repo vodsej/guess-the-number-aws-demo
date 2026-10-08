@@ -12,6 +12,13 @@ describe("parseGuessRequest", () => {
     });
   });
 
+  it("normalises an uppercase gameId to the stored lowercase form", () => {
+    expect(parseGuessRequest(body({ gameId: GAME_ID.toUpperCase(), guess: 7 }))).toEqual({
+      success: true,
+      data: { gameId: GAME_ID, guess: 7 },
+    });
+  });
+
   it("ignores unknown properties", () => {
     expect(parseGuessRequest(body({ gameId: GAME_ID, guess: 7, extra: true }))).toEqual({
       success: true,

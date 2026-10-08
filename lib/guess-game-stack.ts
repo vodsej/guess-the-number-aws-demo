@@ -74,6 +74,14 @@ export class GuessGameStack extends Stack {
       },
     });
 
+    // REST APIs answer unmatched routes/methods with 403 "Missing Authentication Token".
+    // This API has no authorizers, so that response only ever means "no such route".
+    this.api.addGatewayResponse("NotFound", {
+      type: apigateway.ResponseType.MISSING_AUTHENTICATION_TOKEN,
+      statusCode: "404",
+      templates: { "application/json": JSON.stringify({ message: "Not found." }) },
+    });
+
     new CfnOutput(this, "ApiUrl", { value: this.api.url, description: "Base URL of the API" });
     new CfnOutput(this, "TableName", { value: this.table.tableName });
   }

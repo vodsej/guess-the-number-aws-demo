@@ -122,6 +122,14 @@ describe("GuessGameStack", () => {
       });
     });
 
+    it("answers unknown routes and methods with 404 instead of 403", () => {
+      template.hasResourceProperties("AWS::ApiGateway::GatewayResponse", {
+        ResponseType: "MISSING_AUTHENTICATION_TOKEN",
+        StatusCode: "404",
+        ResponseTemplates: { "application/json": '{"message":"Not found."}' },
+      });
+    });
+
     it("throttles the stage", () => {
       template.hasResourceProperties("AWS::ApiGateway::Stage", {
         StageName: "v1",

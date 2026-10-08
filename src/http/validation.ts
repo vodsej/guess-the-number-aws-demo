@@ -7,7 +7,8 @@ const GUESS_ERROR = `guess must be an integer between ${String(MIN_GUESS)} and $
 
 const guessRequestSchema = z.object(
   {
-    gameId: z.uuid({ error: GAME_ID_ERROR }),
+    // UUIDs are case-insensitive; stored ids are lowercase (crypto.randomUUID).
+    gameId: z.uuid({ error: GAME_ID_ERROR }).check(z.toLowerCase()),
     guess: z
       .int({ error: GUESS_ERROR })
       .check(
