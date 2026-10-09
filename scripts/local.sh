@@ -28,12 +28,12 @@ start_floci() {
     local socket="${XDG_RUNTIME_DIR}/podman/podman.sock"
     [[ -S $socket ]] || { echo "Podman socket not found; run: systemctl --user start podman.socket" >&2; exit 1; }
     docker network exists floci || docker network create floci >/dev/null
-    docker run -d --rm --name "$CONTAINER" -p 4566:4566 -u root \
+    docker run -d --rm --name "$CONTAINER" -p 127.0.0.1:4566:4566 -u root \
       --network floci --security-opt label=disable \
       -e FLOCI_HOSTNAME=floci -e FLOCI_SERVICES_LAMBDA_DOCKER_NETWORK=floci \
       -v "$socket:/var/run/docker.sock" "$IMAGE" >/dev/null
   else
-    docker run -d --rm --name "$CONTAINER" -p 4566:4566 -u root \
+    docker run -d --rm --name "$CONTAINER" -p 127.0.0.1:4566:4566 -u root \
       -v /var/run/docker.sock:/var/run/docker.sock "$IMAGE" >/dev/null
   fi
 
