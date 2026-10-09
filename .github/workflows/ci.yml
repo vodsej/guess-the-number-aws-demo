@@ -23,6 +23,8 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      - run: npm audit --omit=dev --audit-level=moderate
+      - run: npm audit signatures
       - run: npm run lint
       - run: npm run typecheck
       - run: npm test
