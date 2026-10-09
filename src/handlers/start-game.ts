@@ -5,12 +5,8 @@ import { errorResponse, jsonResponse } from "../http/responses";
 import { logger } from "../logger";
 import type { GameRepository } from "../repository/game-repository";
 
-interface Dependencies {
-  repository: GameRepository;
-}
-
 /** POST /start-game — creates a new game and returns its id (the secret number stays server-side). */
-export function createStartGameHandler({ repository }: Dependencies) {
+export function createStartGameHandler(repository: GameRepository) {
   return async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
     const log = { route: "POST /start-game", requestId: event.requestContext.requestId };
 

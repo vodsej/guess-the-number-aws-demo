@@ -14,8 +14,8 @@ describe("handlers against DynamoDB Local", () => {
     vi.spyOn(console, "log").mockImplementation(() => undefined);
     table = await createTestTable();
     const repository = new DynamoDbGameRepository(table.client, table.tableName);
-    startGame = createStartGameHandler({ repository });
-    guess = createGuessHandler({ repository });
+    startGame = createStartGameHandler(repository);
+    guess = createGuessHandler(repository);
   });
 
   afterAll(async () => {

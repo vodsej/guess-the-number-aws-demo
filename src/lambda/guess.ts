@@ -3,4 +3,4 @@
 import { createGuessHandler } from "../handlers/guess";
 import { createDynamoDbGameRepository } from "../repository/game-repository";
 
-export const handler = createGuessHandler({ repository: createDynamoDbGameRepository() });
+export const handler = createGuessHandler(createDynamoDbGameRepository());

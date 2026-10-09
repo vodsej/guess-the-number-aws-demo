@@ -35,7 +35,7 @@ describe("guess handler", () => {
       createdAt: new Date().toISOString(),
     };
     await repository.create(game);
-    handler = createGuessHandler({ repository });
+    handler = createGuessHandler(repository);
   });
 
   it.each([

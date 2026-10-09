@@ -5,14 +5,10 @@ import { parseGuessRequest } from "../http/validation";
 import { logger } from "../logger";
 import { GameAlreadyWonError, type GameRepository } from "../repository/game-repository";
 
-interface Dependencies {
-  repository: GameRepository;
-}
-
 const GAME_ALREADY_WON_MESSAGE = "This game has already been won. Start a new game.";
 
 /** POST /guess — compares a guess with the game's secret number. */
-export function createGuessHandler({ repository }: Dependencies) {
+export function createGuessHandler(repository: GameRepository) {
   return async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
     const log = { route: "POST /guess", requestId: event.requestContext.requestId };
 

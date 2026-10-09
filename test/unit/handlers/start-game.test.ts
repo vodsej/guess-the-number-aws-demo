@@ -13,7 +13,7 @@ describe("start-game handler", () => {
 
   it("creates a game and returns 201 with its id", async () => {
     const repository = new InMemoryGameRepository();
-    const handler = createStartGameHandler({ repository });
+    const handler = createStartGameHandler(repository);
 
     const response = await handler(apiGatewayEvent("/start-game"));
 
@@ -34,7 +34,7 @@ describe("start-game handler", () => {
 
   it("does not reveal the secret number", async () => {
     const repository = new InMemoryGameRepository();
-    const response = await createStartGameHandler({ repository })(apiGatewayEvent("/start-game"));
+    const response = await createStartGameHandler(repository)(apiGatewayEvent("/start-game"));
 
     expect(Object.keys(JSON.parse(response.body) as object)).toEqual(["gameId", "message"]);
   });
@@ -43,7 +43,7 @@ describe("start-game handler", () => {
     const repository = new InMemoryGameRepository();
     vi.spyOn(repository, "create").mockRejectedValue(new Error("DynamoDB unavailable"));
 
-    const response = await createStartGameHandler({ repository })(apiGatewayEvent("/start-game"));
+    const response = await createStartGameHandler(repository)(apiGatewayEvent("/start-game"));
 
     expect(response.statusCode).toBe(500);
     expect(JSON.parse(response.body)).toEqual({ message: "Internal server error." });
