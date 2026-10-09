@@ -7,6 +7,11 @@ import {
 } from "@aws-sdk/lib-dynamodb";
 import type { Game, GameStatus } from "../domain/game";
 
+/**
+ * Everything the handlers need from storage. Handlers depend on this interface, not on DynamoDB,
+ * so unit tests can inject an in-memory implementation, and DynamoDB details (condition
+ * expressions, SDK exceptions) stay in DynamoDbGameRepository below.
+ */
 export interface GameRepository {
   create(game: Game): Promise<void>;
   get(gameId: string): Promise<Game | undefined>;
