@@ -3,6 +3,7 @@
 #
 #   scripts/local.sh up     start Floci, bootstrap CDK, deploy the stack, print the API URL
 #   scripts/local.sh e2e    run the e2e test suite against the local stack
+#   scripts/local.sh play   play the game in the terminal against the local stack
 #   scripts/local.sh down   stop Floci (all local state is discarded)
 set -euo pipefail
 
@@ -55,6 +56,9 @@ case "${1:-}" in
   e2e)
     API_URL="$(api_url)" npx vitest run --project e2e
     ;;
+  play)
+    API_URL="$(api_url)" npx tsx scripts/play.ts
+    ;;
   down)
     docker stop "$CONTAINER" >/dev/null 2>&1 || true
     # Floci starts helper containers (e.g. its ECR registry) that outlive it.
@@ -62,7 +66,7 @@ case "${1:-}" in
     [[ -z $helpers ]] || docker rm -f $helpers >/dev/null
     ;;
   *)
-    echo "usage: $0 up|e2e|down" >&2
+    echo "usage: $0 up|e2e|play|down" >&2
     exit 1
     ;;
 esac

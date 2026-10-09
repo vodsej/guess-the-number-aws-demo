@@ -80,6 +80,7 @@ test/integration                   Repository and handlers against DynamoDB Loca
 test/e2e                           Full game against a deployed API (needs API_URL)
 docs/openapi.yaml                  OpenAPI 3.0 description of the API
 scripts/local.sh                   Deploy to the Floci emulator and run the e2e suite locally
+scripts/play.ts                    Interactive terminal client for playing against a deployed API
 .github/workflows/ci.yml           Lint, typecheck, tests, integration tests, cdk synth
 ```
 
@@ -117,6 +118,7 @@ npm run synth          # synthesize the CloudFormation template into cdk.out/
 ```bash
 npm run local:up      # start Floci, deploy the stack, print the local API URL
 npm run local:e2e     # run the e2e suite against it
+npm run local:play    # play the game in the terminal against it
 npm run local:down    # stop Floci and its helper containers
 ```
 

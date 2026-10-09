@@ -21,6 +21,7 @@
     "destroy": "cdk destroy",
     "local:up": "scripts/local.sh up",
     "local:e2e": "scripts/local.sh e2e",
+    "local:play": "scripts/local.sh play",
     "local:down": "scripts/local.sh down"
   },
   "dependencies": {
