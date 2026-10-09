@@ -109,6 +109,29 @@ npm run ddb:stop
 npm run synth          # synthesize the CloudFormation template into cdk.out/
 ```
 
+## Running the whole stack locally (Floci)
+
+[Floci](https://floci.io) is a free, open-source AWS emulator. The real CDK stack deploys to it unchanged: API Gateway routes requests to the Lambdas, which run in containers against an emulated DynamoDB, and the e2e suite runs against it. Floci does not implement API Gateway request validators and models (it skips them with a warning), so there invalid bodies are rejected by the Lambda's own validation instead.
+
+```bash
+docker run -d --rm --name floci -p 4566:4566 -u root \
+  -v /var/run/docker.sock:/var/run/docker.sock docker.io/floci/floci:2.2.0
+
+export AWS_ENDPOINT_URL=http://localhost:4566 AWS_REGION=us-east-1 \
+  AWS_ACCESS_KEY_ID=test AWS_SECRET_ACCESS_KEY=test
+npx cdk bootstrap
+npm run deploy -- --require-approval never
+
+API_ID=$(node -p 'new URL(require("./cdk-outputs.json").GuessTheNumberStack.ApiUrl).hostname.split(".")[0]')
+API_URL=http://localhost:4566/execute-api/$API_ID/v1/ npm run test:e2e
+
+docker stop floci
+```
+
+Open a new shell (or unset these variables) before deploying to real AWS.
+
+With Podman, mount `$XDG_RUNTIME_DIR/podman/podman.sock` as the Docker socket, add `--security-opt label=disable`, and put Floci and its Lambda containers on one network: `podman network create floci`, then add `--network floci -e FLOCI_HOSTNAME=floci -e FLOCI_SERVICES_LAMBDA_DOCKER_NETWORK=floci`.
+
 ## Deploying to AWS
 
 Prerequisites: an AWS account and credentials for it in your shell (e.g. `aws configure` or `AWS_PROFILE=...`). The CDK CLI is a dev dependency, so no global install is needed.
